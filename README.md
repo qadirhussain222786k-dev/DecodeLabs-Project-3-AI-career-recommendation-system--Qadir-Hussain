@@ -1,0 +1,316 @@
+# AI Career & Skill Recommendation System
+
+A full-stack, ML-powered career recommendation system built as an AI internship
+project. Given a user's education, skills, and interests, a trained
+Scikit-learn classification model predicts which career roles fit best, and
+the app explains *why* with a transparent skill-gap analysis and a
+personalized learning roadmap.
+
+> **Honesty note:** This is a real, trained machine-learning model - not an
+> if/else rule engine. The dataset used to train it is **synthetic/demo
+> data**, clearly generated and documented (see [Dataset](#dataset) below),
+> because no public dataset exists with this exact feature set. The
+> percentages you see are the model's actual `predict_proba()` output, not
+> hardcoded numbers.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [ML Methodology](#ml-methodology)
+- [Dataset](#dataset)
+- [Feature Engineering](#feature-engineering)
+- [Model Training & Evaluation](#model-training--evaluation)
+- [Project Structure](#project-structure)
+- [Installation (Windows + VS Code)](#installation-windows--vs-code)
+- [Running the Project](#running-the-project)
+- [Retraining the Model](#retraining-the-model)
+- [API Documentation](#api-documentation)
+- [Frontend](#frontend)
+- [Testing](#testing)
+- [Example Input / Output](#example-input--output)
+- [Future Improvements](#future-improvements)
+- [Limitations](#limitations)
+
+---
+
+## Features
+
+- Career-assessment form covering education, skills, interests, experience, and work preference
+- ML-ranked **top 5** career recommendations with real confidence percentages
+- Skill-gap analysis per recommended career: matched / to-improve / missing skills
+- Phased, beginner-friendly learning roadmap generated from the identified gaps
+- FastAPI backend with input validation, health check, and clear error handling
+- React + Tailwind frontend with a responsive, accessible assessment flow
+- Fully reproducible training pipeline (script + notebooks) with real evaluation metrics
+
+## Technology Stack
+
+**Frontend:** React 18, Vite, Tailwind CSS, Axios, React Router
+**Backend:** Python, FastAPI, Pydantic, Uvicorn
+**Machine Learning:** Pandas, NumPy, Scikit-learn, Joblib, Matplotlib
+
+## System Architecture
+
+```
+React (Vite) frontend  --HTTP/JSON-->  FastAPI backend  --loads-->  career_model.joblib
+                                             |
+                                             +--> career_profiles.py (skill-gap / roadmap rules)
+```
+
+The system has two clearly separated logic layers, kept in different files on
+purpose so it's easy to explain which part is "the ML":
+
+1. **ML prediction layer** (`backend/app/predictor.py`) - loads the trained
+   Scikit-learn pipeline and calls `model.predict_proba()` to rank careers.
+2. **Skill-gap / roadmap layer** (`backend/app/career_profiles.py`,
+   `backend/app/recommender.py`) - a transparent, rule-based knowledge base
+   that compares the user's skills against each career's typical skill
+   profile. This layer is intentionally *not* ML, because it needs to be
+   fully explainable and there's no reliable labeled dataset for "correct
+   skill learning order."
+
+## ML Methodology
+
+- **Task:** multi-class classification (10 career classes)
+- **Candidates compared:** `RandomForestClassifier`, `LogisticRegression`, `GradientBoostingClassifier`
+- **Preprocessing:** `ColumnTransformer` combining `OneHotEncoder` (categorical
+  fields) and `StandardScaler` (numeric skill/interest levels and years of
+  experience), wrapped together with the classifier in a single
+  `sklearn.pipeline.Pipeline` so training-time and inference-time
+  preprocessing can never drift apart.
+- **Model selection metric:** macro-averaged F1-score (fair across all 10
+  roughly-balanced classes)
+- **Output used for recommendations:** `model.predict_proba()`, ranked
+  top-5 - not a hardcoded ranking
+
+### Actual results from the last training run
+
+| Model | Accuracy | Precision (macro) | Recall (macro) | F1 (macro) |
+|---|---|---|---|---|
+| **Logistic Regression (selected)** | **0.9636** | **0.9638** | **0.9636** | **0.9636** |
+| Gradient Boosting Classifier | 0.9523 | 0.9531 | 0.9523 | 0.9521 |
+| Random Forest Classifier | 0.9455 | 0.9472 | 0.9455 | 0.9455 |
+
+These numbers come straight from `backend/models/model_metadata.json`, which
+`training/train_model.py` regenerates every time it runs - they are **not**
+fabricated or hand-typed. Logistic Regression won this run because the
+synthetic dataset's classes are largely linearly separable in the scaled
+feature space; re-running training (a different random split) may produce
+slightly different numbers or occasionally a different winning model - that's
+expected and part of why the script always re-evaluates and re-selects rather
+than assuming one model is always best. A confusion matrix image is saved to
+`backend/models/confusion_matrix.png`.
+
+## Dataset
+
+`backend/data/career_dataset.csv` is a **synthetic/demo dataset** (2,200 rows,
+220 samples per career × 10 careers), generated by
+`training/generate_dataset.py`. It is not scraped real-world data - this is
+stated explicitly so the ML workflow can be presented honestly in an
+evaluation.
+
+**How it's generated:** for each of the 10 career classes, a transparent
+"typical skill profile" (see `backend/app/career_profiles.py`) defines which
+skills/interests tend to be higher for that career. Synthetic candidates are
+then sampled around that profile with realistic noise and some deliberate
+class overlap (e.g. AI Engineer and ML Engineer profiles are similar), so the
+learned decision boundary is genuinely non-trivial rather than a lookup
+table.
+
+**Target classes (10):** AI Engineer, Machine Learning Engineer, Data
+Scientist, Data Analyst, Full Stack Developer, Frontend Developer, Backend
+Developer, DevOps Engineer, Cybersecurity Analyst, Cloud Engineer.
+
+**Data quality checks performed before training** (see
+`training/train_model.py::load_and_validate_data`): missing values,
+duplicate rows, invalid/out-of-range values, and class-balance inspection.
+
+## Feature Engineering
+
+- **Categorical** (`education_level`, `field_of_study`, `preferred_work_type`)
+  → `OneHotEncoder`, since these are nominal categories with no natural order.
+- **Numeric** (13 skill levels 0-3, 5 interest levels 0-3, `years_experience`)
+  → `StandardScaler`, so no single feature's raw scale dominates
+  distance/gradient-sensitive models.
+- Proficiency encoding: `None=0, Beginner=1, Intermediate=2, Advanced=3`.
+
+## Model Training & Evaluation
+
+Two equivalent ways to see the full pipeline:
+
+1. **Notebooks** (`notebooks/01_data_exploration.ipynb` →
+   `02_data_preprocessing.ipynb` → `03_model_training.ipynb`) - interactive,
+   step-by-step, with visualizations. All three have been run end-to-end and
+   contain real output.
+2. **Script** (`training/train_model.py`) - the reproducible source of truth
+   that the backend actually depends on. Run it any time to retrain.
+
+## Project Structure
+
+```
+ai-career-recommendation-system/
+├── backend/
+│   ├── app/
+│   │   ├── main.py            # FastAPI app, routes, CORS, error handling
+│   │   ├── schemas.py         # Pydantic request/response models
+│   │   ├── predictor.py       # ML prediction layer (loads .joblib, predict_proba)
+│   │   ├── recommender.py     # Combines ML + skill-gap layers
+│   │   └── career_profiles.py # Transparent skill-gap / roadmap knowledge base
+│   ├── models/
+│   │   ├── career_model.joblib
+│   │   ├── model_metadata.json
+│   │   └── confusion_matrix.png
+│   ├── data/career_dataset.csv
+│   ├── tests/test_api.py
+│   ├── requirements.txt
+│   └── .env.example
+├── frontend/
+│   ├── src/
+│   │   ├── components/        # AssessmentForm, CareerCard, ResultsDashboard, etc.
+│   │   ├── pages/              # HomePage, AssessmentPage
+│   │   ├── services/api.js     # Axios client + error normalization
+│   │   ├── App.jsx, main.jsx, index.css
+│   ├── package.json, vite.config.js, tailwind.config.js
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_data_preprocessing.ipynb
+│   └── 03_model_training.ipynb
+├── training/
+│   ├── generate_dataset.py
+│   ├── preprocess.py
+│   ├── train_model.py
+│   └── evaluate_model.py
+├── EXAMPLE_API_REQUEST.md
+├── README.md, .gitignore, LICENSE
+```
+
+## Installation (Windows + VS Code)
+
+### Prerequisites
+- Python 3.10+ installed and on PATH
+- Node.js 18+ and npm installed
+- VS Code with the Python extension
+
+### 1. Backend setup
+
+Open a terminal **in the project's root folder** in VS Code, then:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r backend\requirements.txt
+```
+
+### 2. Frontend setup
+
+In a **separate terminal**, from the project root:
+
+```powershell
+cd frontend
+npm install
+```
+
+## Running the Project
+
+The model is already trained and saved (`backend/models/career_model.joblib`),
+so you do **not** need to retrain before first run.
+
+### Start the backend
+
+From the project root, with the virtual environment activated:
+
+```powershell
+cd backend
+uvicorn app.main:app --reload
+```
+
+The API will be available at `http://127.0.0.1:8000` (interactive docs at
+`http://127.0.0.1:8000/docs`).
+
+### Start the frontend
+
+In another terminal, from `frontend/`:
+
+```powershell
+npm run dev
+```
+
+The app will open at `http://localhost:5173`.
+
+## Retraining the Model
+
+To regenerate the dataset and retrain from scratch, from the project root
+(with the virtual environment activated):
+
+```powershell
+python training\generate_dataset.py
+python training\train_model.py
+```
+
+This overwrites `backend/models/career_model.joblib`,
+`model_metadata.json`, and `confusion_matrix.png` with fresh, real metrics.
+Restart the backend afterward to load the new model.
+
+To re-evaluate the currently saved model without retraining:
+
+```powershell
+python training\evaluate_model.py
+```
+
+## API Documentation
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/` | Basic API info |
+| GET | `/health` | Health check + whether the model is loaded |
+| POST | `/api/recommend` | Main endpoint - returns ranked career recommendations |
+
+See [`EXAMPLE_API_REQUEST.md`](./EXAMPLE_API_REQUEST.md) for a full example
+request/response, or visit `/docs` while the backend is running for
+interactive Swagger documentation.
+
+## Frontend
+
+- **Home** - landing page with a call to action
+- **Assessment** - the multi-section form (Personal/Education, Experience,
+  Skills, Interests, Preferences)
+- **Results Dashboard** - ranked `CareerCard`s, each expandable to show
+  matched/missing/to-improve skills and a phased learning roadmap
+- Handles loading states and friendly error messages for backend-down,
+  validation, and network-error cases
+
+## Testing
+
+```powershell
+cd backend
+pytest tests\test_api.py -v
+```
+
+Covers: health endpoint, a valid recommendation request (checking response
+shape and that results are sorted by confidence), invalid skill-level values,
+missing required fields, and invalid enum values.
+
+## Example Input / Output
+
+See [`EXAMPLE_API_REQUEST.md`](./EXAMPLE_API_REQUEST.md).
+
+## Future Improvements
+
+- Replace the synthetic dataset with a real, labeled dataset if one becomes available
+- Add user accounts to track how recommendations change as skills improve over time
+- Add SHAP-based explainability for individual predictions
+- Containerize the app (Docker) for easier deployment
+- Add CI to run `pytest` automatically on every push
+
+## Limitations
+
+- Trained on **synthetic data** - real-world hiring patterns are more complex
+  and this system has not been validated against real outcomes.
+- 10 career classes only; doesn't cover many other valid tech (or non-tech) careers.
+- This system provides AI-assisted **suggestions** based on learned patterns
+  and user-provided input - it does not, and cannot, determine anyone's
+  objectively "correct" career.

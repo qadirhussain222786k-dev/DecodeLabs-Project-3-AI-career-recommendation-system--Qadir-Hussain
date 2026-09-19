@@ -1,0 +1,227 @@
+{
+  "model_name": "LogisticRegression",
+  "training_date": "2026-09-19T11:44:21.010720+00:00",
+  "random_state": 42,
+  "feature_names": [
+    "education_level",
+    "field_of_study",
+    "preferred_work_type",
+    "years_experience",
+    "python_level",
+    "javascript_level",
+    "java_level",
+    "sql_level",
+    "react_level",
+    "nodejs_level",
+    "machine_learning_level",
+    "data_analysis_level",
+    "cloud_level",
+    "cybersecurity_level",
+    "statistics_level",
+    "communication_level",
+    "problem_solving_level",
+    "interest_ai",
+    "interest_web",
+    "interest_data",
+    "interest_cloud",
+    "interest_security"
+  ],
+  "target_classes": [
+    "AI Engineer",
+    "Backend Developer",
+    "Cloud Engineer",
+    "Cybersecurity Analyst",
+    "Data Analyst",
+    "Data Scientist",
+    "DevOps Engineer",
+    "Frontend Developer",
+    "Full Stack Developer",
+    "Machine Learning Engineer"
+  ],
+  "dataset_info": {
+    "path": "backend\\data\\career_dataset.csv",
+    "n_rows": 2200,
+    "n_features": 22,
+    "type": "synthetic/demo",
+    "class_distribution": {
+      "Backend Developer": 220,
+      "Cybersecurity Analyst": 220,
+      "DevOps Engineer": 220,
+      "Frontend Developer": 220,
+      "Data Scientist": 220,
+      "Data Analyst": 220,
+      "Full Stack Developer": 220,
+      "Cloud Engineer": 220,
+      "AI Engineer": 220,
+      "Machine Learning Engineer": 220
+    }
+  },
+  "train_test_split": {
+    "test_size": 0.2,
+    "n_train": 1760,
+    "n_test": 440,
+    "stratified": true
+  },
+  "all_model_metrics": {
+    "RandomForestClassifier": {
+      "accuracy": 0.9454545454545454,
+      "precision_macro": 0.9472251817555477,
+      "recall_macro": 0.9454545454545455,
+      "f1_macro": 0.9455019277379281
+    },
+    "LogisticRegression": {
+      "accuracy": 0.9636363636363636,
+      "precision_macro": 0.9637576180700549,
+      "recall_macro": 0.9636363636363635,
+      "f1_macro": 0.963550359473564
+    },
+    "GradientBoostingClassifier": {
+      "accuracy": 0.9522727272727273,
+      "precision_macro": 0.9530552618884152,
+      "recall_macro": 0.9522727272727272,
+      "f1_macro": 0.9521453371960472
+    }
+  },
+  "selected_model_metrics": {
+    "accuracy": 0.9636363636363636,
+    "precision_macro": 0.9637576180700549,
+    "recall_macro": 0.9636363636363635,
+    "f1_macro": 0.963550359473564
+  },
+  "confusion_matrix": {
+    "labels": [
+      "AI Engineer",
+      "Backend Developer",
+      "Cloud Engineer",
+      "Cybersecurity Analyst",
+      "Data Analyst",
+      "Data Scientist",
+      "DevOps Engineer",
+      "Frontend Developer",
+      "Full Stack Developer",
+      "Machine Learning Engineer"
+    ],
+    "matrix": [
+      [
+        42,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        44,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        41,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        44,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        43,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        43,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        40,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        43,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        44,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        40
+      ]
+    ]
+  }
+}
