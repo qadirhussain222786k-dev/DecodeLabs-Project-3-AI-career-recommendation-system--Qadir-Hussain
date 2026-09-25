@@ -15,7 +15,7 @@ export default function CareerCard({ recommendation, rank }) {
   } = recommendation;
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-2xl border border-white/5 bg-navy-800/60 shadow-card overflow-hidden transition-colors hover:border-white/10">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
@@ -24,24 +24,26 @@ export default function CareerCard({ recommendation, rank }) {
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wide text-brand-600">
+            <span className="text-xs font-medium text-brand-glow">
               #{rank} Recommendation
             </span>
-            <h3 className="text-lg font-semibold text-gray-900">{career}</h3>
+            <h3 className="font-display text-lg font-semibold text-white">
+              {career}
+            </h3>
           </div>
-          <span className="text-2xl font-bold text-brand-700">
+          <span className="font-display text-2xl font-semibold text-white">
             {Math.round(confidence * 100)}%
           </span>
         </div>
         <ConfidenceBar value={confidence} />
-        <p className="text-sm text-gray-600">{explanation}</p>
+        <p className="text-sm text-navy-300">{explanation}</p>
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 p-5 flex flex-col gap-5">
+        <div className="border-t border-white/5 p-5 flex flex-col gap-5">
           <div className="grid sm:grid-cols-3 gap-4">
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+              <h4 className="text-xs font-medium text-navy-300 mb-2">
                 Matched Skills
               </h4>
               <div className="flex flex-wrap gap-1.5">
@@ -52,12 +54,12 @@ export default function CareerCard({ recommendation, rank }) {
                     </SkillBadge>
                   ))
                 ) : (
-                  <span className="text-xs text-gray-400">None yet</span>
+                  <span className="text-xs text-navy-400">None yet</span>
                 )}
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+              <h4 className="text-xs font-medium text-navy-300 mb-2">
                 Skills to Improve
               </h4>
               <div className="flex flex-wrap gap-1.5">
@@ -68,12 +70,12 @@ export default function CareerCard({ recommendation, rank }) {
                     </SkillBadge>
                   ))
                 ) : (
-                  <span className="text-xs text-gray-400">None</span>
+                  <span className="text-xs text-navy-400">None</span>
                 )}
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+              <h4 className="text-xs font-medium text-navy-300 mb-2">
                 Missing Skills
               </h4>
               <div className="flex flex-wrap gap-1.5">
@@ -84,25 +86,25 @@ export default function CareerCard({ recommendation, rank }) {
                     </SkillBadge>
                   ))
                 ) : (
-                  <span className="text-xs text-gray-400">None</span>
+                  <span className="text-xs text-navy-400">None</span>
                 )}
               </div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">
+            <h4 className="text-xs font-medium text-navy-300 mb-3">
               Suggested Learning Roadmap
             </h4>
             <ol className="space-y-3">
               {learningPath.map((phase) => (
                 <li key={phase.phase} className="flex gap-3">
-                  <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold flex items-center justify-center">
+                  <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-brand-500/15 text-brand-glow text-xs font-semibold flex items-center justify-center">
                     {phase.phase.match(/\d+/)?.[0] || "-"}
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-gray-800">{phase.phase}</p>
-                    <p className="text-sm text-gray-600">{phase.topics.join(", ")}</p>
+                    <p className="text-sm font-medium text-white">{phase.phase}</p>
+                    <p className="text-sm text-navy-300">{phase.topics.join(", ")}</p>
                   </div>
                 </li>
               ))}

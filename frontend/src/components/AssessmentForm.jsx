@@ -89,7 +89,7 @@ export default function AssessmentForm({ onSubmit, submitting }) {
       >
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700" htmlFor="education_level">
+            <label className="text-sm font-medium text-navy-100" htmlFor="education_level">
               Education level
             </label>
             <select
@@ -97,10 +97,10 @@ export default function AssessmentForm({ onSubmit, submitting }) {
               name="education_level"
               value={form.education_level}
               onChange={handleTextChange}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none"
+              className="rounded-lg border border-white/10 bg-navy-800 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-brand-400"
             >
               {EDUCATION_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
+                <option key={opt} value={opt} className="bg-navy-800">
                   {opt}
                 </option>
               ))}
@@ -108,7 +108,7 @@ export default function AssessmentForm({ onSubmit, submitting }) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700" htmlFor="field_of_study">
+            <label className="text-sm font-medium text-navy-100" htmlFor="field_of_study">
               Field of study
             </label>
             <select
@@ -116,10 +116,10 @@ export default function AssessmentForm({ onSubmit, submitting }) {
               name="field_of_study"
               value={form.field_of_study}
               onChange={handleTextChange}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none"
+              className="rounded-lg border border-white/10 bg-navy-800 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-brand-400"
             >
               {FIELD_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
+                <option key={opt} value={opt} className="bg-navy-800">
                   {opt}
                 </option>
               ))}
@@ -133,7 +133,7 @@ export default function AssessmentForm({ onSubmit, submitting }) {
         description="Total professional (or internship/project) experience, in years."
       >
         <div className="max-w-xs flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700" htmlFor="years_experience">
+          <label className="text-sm font-medium text-navy-100" htmlFor="years_experience">
             Years of experience
           </label>
           <input
@@ -145,7 +145,7 @@ export default function AssessmentForm({ onSubmit, submitting }) {
             step={0.5}
             value={form.years_experience}
             onChange={handleNumberChange}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none"
+            className="rounded-lg border border-white/10 bg-navy-800 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-brand-400"
           />
         </div>
       </FormSection>
@@ -195,8 +195,8 @@ export default function AssessmentForm({ onSubmit, submitting }) {
               key={opt}
               className={`cursor-pointer rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
                 form.preferred_work_type === opt
-                  ? "border-brand-600 bg-brand-50 text-brand-700"
-                  : "border-gray-300 text-gray-600 hover:border-brand-300"
+                  ? "border-brand-400 bg-brand-500/10 text-white"
+                  : "border-white/10 text-navy-300 hover:border-brand-400/50 hover:text-white"
               }`}
             >
               <input
@@ -216,7 +216,7 @@ export default function AssessmentForm({ onSubmit, submitting }) {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full sm:w-auto self-start rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+        className="w-full sm:w-auto self-start rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-glow hover:bg-brand-400 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
       >
         {submitting ? "Analyzing your profile..." : "Get My Career Recommendations"}
       </button>

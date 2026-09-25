@@ -9,8 +9,8 @@ const LEVELS = [
 
 export default function SkillLevelSelect({ label, name, value, onChange }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={name} className="text-sm font-medium text-gray-700">
+    <div className="flex flex-col gap-1.5">
+      <label htmlFor={name} className="text-sm font-medium text-navy-100">
         {label}
       </label>
       <select
@@ -18,10 +18,10 @@ export default function SkillLevelSelect({ label, name, value, onChange }) {
         name={name}
         value={value}
         onChange={(e) => onChange(name, Number(e.target.value))}
-        className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none"
+        className="rounded-lg border border-white/10 bg-navy-800 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-brand-400"
       >
         {LEVELS.map((lvl) => (
-          <option key={lvl.value} value={lvl.value}>
+          <option key={lvl.value} value={lvl.value} className="bg-navy-800">
             {lvl.label}
           </option>
         ))}

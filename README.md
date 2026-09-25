@@ -6,13 +6,6 @@ Scikit-learn classification model predicts which career roles fit best, and
 the app explains *why* with a transparent skill-gap analysis and a
 personalized learning roadmap.
 
-> **Honesty note:** This is a real, trained machine-learning model - not an
-> if/else rule engine. The dataset used to train it is **synthetic/demo
-> data**, clearly generated and documented (see [Dataset](#dataset) below),
-> because no public dataset exists with this exact feature set. The
-> percentages you see are the model's actual `predict_proba()` output, not
-> hardcoded numbers.
-
 ---
 
 ## Table of Contents
@@ -203,6 +196,7 @@ Open a terminal **in the project's root folder** in VS Code, then:
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r backend\requirements.txt
+to run backend : uvicorn app.main:app --reload
 ```
 
 ### 2. Frontend setup
@@ -305,6 +299,10 @@ See [`EXAMPLE_API_REQUEST.md`](./EXAMPLE_API_REQUEST.md).
 - Add SHAP-based explainability for individual predictions
 - Containerize the app (Docker) for easier deployment
 - Add CI to run `pytest` automatically on every push
+
+## Author
+ 👤 Qadir Hussain
+ AI/ML Intern Software Engineering Student at CUST
 
 ## Limitations
 

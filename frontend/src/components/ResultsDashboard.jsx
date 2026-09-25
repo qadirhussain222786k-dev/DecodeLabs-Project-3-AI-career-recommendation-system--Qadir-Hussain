@@ -8,17 +8,17 @@ export default function ResultsDashboard({ data, onStartOver }) {
     <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="font-display text-xl font-semibold text-white">
             Career Recommendation Results
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-navy-300 mt-1">
             Ranked by predicted fit, using a trained {modelName || "machine learning"} model.
           </p>
         </div>
         <button
           type="button"
           onClick={onStartOver}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-navy-100 transition-colors hover:border-white/25 hover:text-white"
         >
           Start Over
         </button>

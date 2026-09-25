@@ -4,12 +4,12 @@ const LABELS = ["Not interested", "Slightly interested", "Interested", "Very int
 
 export default function InterestSlider({ label, name, value, onChange }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <label htmlFor={name} className="text-sm font-medium text-gray-700">
+        <label htmlFor={name} className="text-sm font-medium text-navy-100">
           {label}
         </label>
-        <span className="text-xs text-gray-500">{LABELS[value]}</span>
+        <span className="text-xs text-navy-300">{LABELS[value]}</span>
       </div>
       <input
         id={name}
@@ -20,7 +20,7 @@ export default function InterestSlider({ label, name, value, onChange }) {
         step={1}
         value={value}
         onChange={(e) => onChange(name, Number(e.target.value))}
-        className="w-full accent-brand-600"
+        className="w-full accent-brand-500"
         aria-valuetext={LABELS[value]}
       />
     </div>

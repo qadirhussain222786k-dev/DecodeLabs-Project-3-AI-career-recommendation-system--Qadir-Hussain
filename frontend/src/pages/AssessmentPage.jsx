@@ -42,8 +42,8 @@ export default function AssessmentPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">Career Assessment</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="font-display text-2xl font-semibold text-white">Career Assessment</h1>
+        <p className="text-sm text-navy-300 mt-1">
           Fill out the sections below. All fields help the model give you a more
           accurate recommendation.
         </p>
